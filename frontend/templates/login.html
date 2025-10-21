@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Customer Support Ticketing System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="backhome">
+        <a href="{{ url_for('home') }}">← Back to Home</a>
+    </div>
+    
+    <div class="authcontainer">
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Login to continue to Customer Support Ticketing System</p>
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p class="redirecttext">
+            Don't have an account? 
+            <a href="{{ url_for('auth.signup') }}">Sign up here</a>
+        </p>
+    </div>
+</body>
+</html>

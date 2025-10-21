@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users — Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminusers.css') }}">
+    <style>
+        table{width:100%;border-collapse:collapse;background:#fff}
+        th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left}
+        th{background:#f3f4f6}
+    </style>
+    
+</head>
+<body>
+    <div class="dashboardcontainer" style="padding:20px;">
+        <h1>Users</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Tickets</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ 'Admin' if u.is_admin else 'User' }}</td>
+                    <td>{{ u.tickets|length }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p style="margin-top:16px;"><a href="{{ url_for('admin_dashboard') }}">Back to dashboard</a></p>
+    </div>
+</body>
+</html>
+
+

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket #{{ ticket.id }} — Customer Support Ticketing System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Customer Support Ticketing System</h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/auth/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="flash {{ category }}">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="ticket-detail-card">
+            <h2>#{{ ticket.id }} — {{ ticket.title }}</h2>
+            <p><strong>Category:</strong> {{ ticket.category }}</p>
+            <p><strong>Priority:</strong> {{ ticket.priority }}</p>
+            <p><strong>Status:</strong> {{ ticket.status }}</p>
+            <p><strong>Assigned Agent:</strong> {{ ticket.assigned_agent or 'Unassigned' }}</p>
+            <p><strong>Description:</strong></p>
+            <p>{{ ticket.description }}</p>
+
+            {% if current_user.is_admin %}
+            <form id="updateTicketForm" method="POST" action="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">
+                <label>Status</label>
+                <select name="status">
+                    <option value="Open" {% if ticket.status == 'Open' %}selected{% endif %}>Open</option>
+                    <option value="In Progress" {% if ticket.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                    <option value="Closed" {% if ticket.status == 'Closed' %}selected{% endif %}>Closed</option>
+                </select>
+
+                <label>Priority</label>
+                <select name="priority">
+                    <option value="Low" {% if ticket.priority == 'Low' %}selected{% endif %}>Low</option>
+                    <option value="Medium" {% if ticket.priority == 'Medium' %}selected{% endif %}>Medium</option>
+                    <option value="High" {% if ticket.priority == 'High' %}selected{% endif %}>High</option>
+                </select>
+
+                <label>Assign Agent</label>
+                <input type="text" name="assigned_agent" value="{{ ticket.assigned_agent or '' }}">
+
+                <label>Internal Notes</label>
+                <textarea name="internal_notes">{{ ticket.internal_notes or '' }}</textarea>
+
+                <div class="form-actions">
+                    <button class="btn" type="submit">Update Ticket</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

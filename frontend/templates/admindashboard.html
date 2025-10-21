@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard — Customer Support Ticketing System </title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admindashboard.css') }}">
+</head>
+<body>
+    <div class="dashboardcontainer">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2 class="logo">Customer Support Ticketing System  Admin</h2>
+            <nav>
+                <ul>
+                    <li class="active"><a href="#">All Tickets</a></li>
+                    <li><a href="{{ url_for('tickets.analytics_admin') }}">Analytics</a></li>
+                    <li><a href="{{ url_for('auth.admin_users') }}">Users</a></li>
+                    <li><a href="/auth/logout" class="logout-btn">Logout</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="maincontent">
+            <!-- Header -->
+            <header class="topbar">
+                <h1>Welcome, {{ current_user.name }}</h1>
+                <div class="topactions">
+                    <input type="text" id="searchBox" placeholder="Search tickets...">
+                   
+                    <select id="statusFilter">
+                        <option value=""> Status</option>
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Resolved">Resolved</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                    <select id="priorityFilter">
+                        <option value=""> Priority</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                    <button id="newTicketBtn" class="btn-primary">+ New Ticket</button>
+                </div>
+            </header>
+
+            <!-- Tickets Section -->
+            <div class="ticketssection">
+                {% if tickets %}
+                    {% for ticket in tickets %}
+                        <div class="ticketcard" id="ticket-{{ ticket.id }}" 
+                             data-created="{{ ticket.created_at.strftime('%Y-%m-%d') if ticket.created_at else '' }}" 
+                             data-priority="{{ ticket.priority }}" 
+                             data-status="{{ ticket.status }}">
+                            <div class="ticketheader">
+                                <h3>{{ ticket.title }}</h3>
+                                <span class="status {{ ticket.status|lower|replace(' ', '-') }}">
+                                    {{ ticket.status }}
+                                </span>
+                            </div>
+                            <p style="margin:0;color:#6b7280;font-size:12px;">Created: {{ ticket.created_at.strftime('%Y-%m-%d %H:%M') if ticket.created_at else '' }}</p>
+                            <p class="ticket-desc">{{ ticket.description }}</p>
+                            <p><strong>Category:</strong> {{ ticket.category }}</p>
+
+                            <p><strong>Status:</strong>
+                                <select id="status-{{ ticket.id }}">
+                                    <option value="Open" {% if ticket.status=='Open' %}selected{% endif %}>Open</option>
+                                    <option value="In Progress" {% if ticket.status=='In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Resolved" {% if ticket.status=='Resolved' %}selected{% endif %}>Resolved</option>
+                                    <option value="Closed" {% if ticket.status=='Closed' %}selected{% endif %}>Closed</option>
+                                </select>
+                            </p>
+
+                            <p><strong>Priority:</strong>
+                                <select id="priority-{{ ticket.id }}">
+                                    <option value="Low" {% if ticket.priority=='Low' %}selected{% endif %}>Low</option>
+                                    <option value="Medium" {% if ticket.priority=='Medium' %}selected{% endif %}>Medium</option>
+                                    <option value="High" {% if ticket.priority=='High' %}selected{% endif %}>High</option>
+                                </select>
+                            </p>
+
+                            <p><strong>Assigned Agent:</strong>
+                                <input type="text" id="agent-{{ ticket.id }}" value="{{ ticket.assigned_agent or '' }}">
+                            </p>
+
+                            <p><strong>Internal Notes:</strong></p>
+                            <textarea id="notes-{{ ticket.id }}">{{ ticket.internal_notes or '' }}</textarea>
+
+                            <!-- Admin actions -->
+                            <div class="ticketactions">
+                                <button class="update-ticket-btn btn-primary" data-id="{{ ticket.id }}">save</button>
+                                <button class="delete-ticket-btn btn-danger" data-id="{{ ticket.id }}">Delete</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-tickets">No tickets found.</p>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <!-- Unified Modal for Ticket Creation/Update -->
+    <div id="ticketModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="modalClose" class="close-btn">&times;</span>
+            <h2 id="modalTitle">Create New Ticket</h2>
+            <form id="ticketForm">
+                <input type="hidden" id="ticketId" name="ticketId">
+                
+                <label>Title</label>
+                <input type="text" id="ticketTitle" name="title" required>
+
+                <label>Description</label>
+                <textarea id="ticketDescription" name="description" required></textarea>
+
+                <label>Category</label>
+                <input type="text" id="ticketCategory" name="category" required>
+
+                <label>Priority</label>
+                <select id="ticketPriority" name="priority" required>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <!-- Admin-only fields -->
+                <div id="adminFields" style="display: none;">
+                    <label>Status</label>
+                    <select id="ticketStatus" name="status">
+                        <option value="Open">Open</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+
+                    <label>Assigned Agent</label>
+                    <input type="text" id="ticketAgent" name="assigned_agent">
+
+                    <label>Internal Notes</label>
+                    <textarea id="ticketNotes" name="internal_notes"></textarea>
+                </div>
+
+                <div class="formbuttons">
+                    <button type="submit" class="btn-primary" id="submitBtn">Create</button>
+                    <button type="button" id="modalCancel" class="btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='javascript/dashboard.js') }}"></script>
+</body>
+</html>
