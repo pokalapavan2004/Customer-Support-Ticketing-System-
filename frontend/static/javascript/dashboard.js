@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // script for auto refresh in the user dashboard 
     function refreshUserTickets(silent = false) {
         if (!silent) {
-            console.log('🔄 Refreshing tickets...');
+            console.log(' Refreshing tickets...');
         }
         
         fetch('/tickets/all', {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
         .catch(error => {
-            console.error('❌ Error refreshing tickets:', error);
+            console.error(' Error refreshing tickets:', error);
             if (!silent) {
                 showNotification('Failed to refresh tickets', 'error');
             }
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Show notification only if there are actual changes and not initial load
         if (hasChanges && !silent) {
-            showNotification(`✨ ${changedTickets.length} ticket(s) updated!`, 'success');
+            showNotification(` ${changedTickets.length} ticket(s) updated!`, 'success');
         }
         
         // Clear and rebuild script 
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     showNotification(result.error || 'Failed to save ticket!', 'error');
                 }
             } catch (err) {
-                console.error('❌ Error:', err);
+                console.error(' Error:', err);
                 showNotification('Failed to save ticket!', 'error');
             }
         });
@@ -312,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     showNotification(result.error || 'Failed to update profile!', 'error');
                 }
             } catch (err) {
-                console.error('❌ Error:', err);
+                console.error(' Error:', err);
                 showNotification('Failed to update profile!', 'error');
             }
         });
@@ -429,8 +429,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await response.json();
                 
                 if (response.ok) {
-                    showNotification('✅ Ticket updated successfully!', 'success');
-                    btn.textContent = '✓ Saved';
+                    showNotification(' Ticket updated successfully!', 'success');
+                    btn.textContent = ' Saved';
                     setTimeout(() => {
                         btn.textContent = originalText;
                         btn.disabled = false;
@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.disabled = false;
                 }
             } catch (err) {
-                console.error('❌ Error:', err);
+                console.error(' Error:', err);
                 showNotification('Error updating ticket', 'error');
                 btn.textContent = originalText;
                 btn.disabled = false;
@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-ticket-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
             const id = btn.dataset.id;
-            if (!confirm('⚠️ Are you sure you want to delete this ticket? This action cannot be undone.')) return;
+            if (!confirm(' Are you sure you want to delete this ticket? This action cannot be undone.')) return;
 
             btn.disabled = true;
             const originalText = btn.textContent;
@@ -477,7 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.disabled = false;
                 }
             } catch (err) {
-                console.error('❌ Error:', err);
+                console.error(' Error:', err);
                 showNotification('Failed to delete ticket!', 'error');
                 btn.textContent = originalText;
                 btn.disabled = false;
@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // auto refresh 
     if (isUserDashboard) {
-        console.log('👤 User dashboard detected - enabling auto-refresh');
+        console.log(' User dashboard detected - enabling auto-refresh');
         
         // Initial load of ticket states (silent) after 2 seconds
         setTimeout(() => refreshUserTickets(true), 2000);
@@ -531,5 +531,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial filter application
     applyFilters();
     
-    console.log('✅ Dashboard initialized successfully');
+    console.log(' Dashboard initialized successfully');
 });
