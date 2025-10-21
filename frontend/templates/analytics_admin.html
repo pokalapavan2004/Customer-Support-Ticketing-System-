@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Analytics — Customer Support Ticketing System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/adminanalytics.css') }}">
+    <style>
+        .analytics-wrap{padding:20px}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+        .stat-card{background:#fff;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.05);padding:16px;border:1px solid #e5e7eb}
+        .stat-card h3{margin:0 0 8px 0;color:#374151}
+        .stat-val{font-size:28px;font-weight:700;color:#111827}
+    </style>
+    <script>
+        async function loadStats(){
+            const res = await fetch('/tickets/stats');
+            const s = await res.json();
+            for(const k of ['total','open','in_progress','resolved','closed']){
+                const el = document.getElementById('stat-'+k);
+                if(el) el.textContent = s[k] ?? 0;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadStats);
+    </script>
+</head>
+<body>
+    <div class="dashboardcontainer analytics-wrap">
+        <h1>System Analytics</h1>
+        <div class="statsgrid">
+            <div class="statcard"><h3>Total</h3><div class="statval" id="stat-total">0</div></div>
+            <div class="statcard"><h3>Open</h3><div class="statval" id="stat-open">0</div></div>
+            <div class="statcard"><h3>In Progress</h3><div class="statval" id="stat-in_progress">0</div></div>
+            <div class="statcard"><h3>Resolved</h3><div class="statval" id="stat-resolved">0</div></div>
+            <div class="statcard"><h3>Closed</h3><div class="statval" id="stat-closed">0</div></div>
+        </div>
+        <p style="margin-top:16px;"><a href="{{ url_for('admin_dashboard') }}">Back to dashboard</a></p>
+    </div>
+</body>
+</html>
+
+

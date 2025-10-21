@@ -1,0 +1,105 @@
+   body {
+    font-family: 'Poppins', sans-serif;
+    background: #f3f4f6;
+    margin: 0;
+    padding: 0;
+    color: #1f2937;
+}
+
+.dashboardcontainer {
+    max-width: 1100px;
+    margin: 50px auto;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 30px 40px;
+    transition: box-shadow 0.3s ease;
+}
+
+.dashboardcontainer:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+.dashboardcontainer h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 25px;
+}
+.analyticswrap {
+    padding: 20px;
+}
+.statsgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+.statcard {
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    cursor: default;
+}
+
+.statcard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.statcard h3 {
+    margin: 0 0 8px 0;
+    color: #374151;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.statval {
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: 0.03em;
+}
+
+#stat-total { color: black; }      
+#stat-open { color: black; }       
+#stat-in_progress { color: black; } 
+#stat-resolved { color: black; }    
+#stat-closed { color: black; }     
+a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+@media (max-width: 768px) {
+    .dashboardcontainer {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    .statsgrid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+    }
+
+    .statcard {
+        padding: 16px;
+    }
+
+    .statval {
+        font-size: 26px;
+    }
+
+    .dashboardcontainer h1 {
+        font-size: 24px;
+    }
+}
